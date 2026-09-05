@@ -71,7 +71,7 @@ jobs:
               gh run delete $run_id || true
             fi
           done
-                - name: 📢 发送 Discord 通知
+      - name: 📢 发送 Discord 通知
         if: always()
         run: |
           if [ "${{ job.status }}" = "success" ]; then
