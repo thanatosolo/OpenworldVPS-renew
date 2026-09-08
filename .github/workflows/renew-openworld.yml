@@ -76,12 +76,8 @@ jobs:
         if: always()
         run: |
           if [ "${{ job.status }}" = "success" ]; then
-            COLOR=3066993
-            TITLE="✅ Openworld VPS 续期成功"
+            RESULT="✅ Openworld VPS 续期成功"
           else
-            COLOR=15158332
-            TITLE="❌ Openworld VPS 续期失败"
+            RESULT="❌ Openworld VPS 续期失败"
           fi
-          curl -H "Content-Type: application/json" \
-            -d "{\"embeds\":[{\"title\":\"$TITLE\",\"color\":$COLOR,\"fields\":[{\"name\":\"状态\",\"value\":\"${{ job.status }}\",\"inline\":true},{\"name\":\"时间\",\"value\":\"$(date '+%Y-%m-%d %H:%M:%S')\",\"inline\":true}],\"footer\":{\"text\":\"Openworld VPS 自动续期\"}}]}" \
-            "${{ secrets.DISCORD_WEBHOOK }}"
+          curl -H "Content-Type: application/json"             -d "{\"content\":\"$RESULT | 时间：$(date '+%Y-%m-%d %H:%M:%S')\"}"             "${{ secrets.DISCORD_WEBHOOK }}"
