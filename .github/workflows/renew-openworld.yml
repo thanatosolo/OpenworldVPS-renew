@@ -81,11 +81,14 @@ jobs:
             RESULT="❌ Openworld VPS 续期失败"
           fi
           TIME=$(date '+%Y-%m-%d %H:%M:%S')
-          
+          DESP=$(printf "%s\n时间：%s" "$RESULT" "$TIME")
+
           # 发送到 Discord (纯文本)
           curl -s -H "Content-Type: application/json" \
             -d "{\"content\":\"$RESULT | 时间：$TIME\"}" \
             "${{ secrets.DISCORD_WEBHOOK }}" || true
-          
-          # 发送到 Server酱微信
-          curl -s "https://sctapi.ftqq.com/${{ secrets.SERVERCHAN_KEY }}.send?title=VPS续期通知&desp=$RESULT\n时间：$TIME" || true
+
+          # 发送到 Server酱微信（URL 参数自动编码，修复中文/空格导致发送失败）
+          curl -sG "https://sctapi.ftqq.com/${{ secrets.SERVERCHAN_KEY }}.send" \
+            --data-urlencode "title=VPS续期通知" \
+            --data-urlencode "desp=$DESP" || true
